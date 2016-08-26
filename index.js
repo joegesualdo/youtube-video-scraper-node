@@ -5,6 +5,9 @@ const xray = XRay();
 
 class YoutubeScraper {
   constructor(videoId) {
+    if (!videoId) {
+      throw new Error('Missing constructor argument: \'videoId\'');
+    }
     return new Promise((resolve, reject) => {
       const url = `https://www.youtube.com/watch?v=${videoId}`;
 

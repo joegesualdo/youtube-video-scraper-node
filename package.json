@@ -1,6 +1,6 @@
 {
   "name": "@joegesualdo/youtube-video-scraper-node",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Get information from the html of a youtube video page.",
   "repository": "joegesualdo/youtube-video-scraper-node",
   "main": "./dist/index.js",

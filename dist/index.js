@@ -73,6 +73,9 @@ module.exports =
 
 	    _classCallCheck(this, YoutubeScraper);
 
+	    if (!videoId) {
+	      throw new Error('Missing constructor argument: \'videoId\'');
+	    }
 	    return new Promise(function (resolve, reject) {
 	      var url = 'https://www.youtube.com/watch?v=' + videoId;
 
