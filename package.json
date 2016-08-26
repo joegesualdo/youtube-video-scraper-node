@@ -23,5 +23,8 @@
     "ava": "^0.15.2",
     "distify-cli": "0.0.13"
   },
-  "dependencies": {}
+  "dependencies": {
+    "parse5": "^2.2.0",
+    "x-ray": "^2.3.0"
+  }
 }

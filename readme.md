@@ -1,12 +1,6 @@
 ## @joegesualdo/youtube-video-scraper-node [![Build Status](https://travis-ci.org/joegesualdo/youtube-video-scraper-node.svg?branch=master)](https://travis-ci.org/joegesualdo/youtube-video-scraper-node)
 > Get information from the html of a youtube video page.
 
-## Highlights
-
-- Highlight 1
-- Highlight 2
-- Highlight 3
-
 ## Install
 ```
 $ npm install --save @joegesualdo/youtube-video-scraper-node 
@@ -14,30 +8,138 @@ $ npm install --save @joegesualdo/youtube-video-scraper-node
 
 ## Usage
 ```javascript
-var @joegesualdo/youtubeVideoScraperNode = require("@joegesualdo/youtubeVideoScraperNode").default
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
 
-// insert code example here
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getMetaInformation()
+  .then(meta => {
+    console.log(meta)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  scraper.getAuthorInfo()
+  .then(author => {
+    console.log(author)
+  })
+  scraper.getDescriptionExtras()
+  .then(result => {
+    console.log(result)
+  })
+  scraper.getViewCount()
+  .then(viewCount=> {
+    console.log(viewCount)
+  })
+})
 ```
 
-## Test
-```
-$ npm test
-```
 ## API
-### `methodName(arg1, arg2)`
-> What does this method do?
+### `YoutubeVideoScraper(videoId)`
+> Constructor: Creates a scraper instance
 
 | Name | Type | Description |
 |------|------|-------------|
-| arg1 | `Array` | Test description|
-| arg2 | `String` | Test description|
+| videoId | `String` | The ID of the youtube video|
 
-Returns: `Array`, of things
+Returns: `Promise`, and passes the instance of `YoutubeVideoScraper`
 
 ```javascript
-var @joegesualdo/youtubeVideoScraperNode = require("@joegesualdo/youtube-video-scraper-node").default
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
 
-// insert method example here
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getAuthorInfo()
+  .then(meta => {
+    console.log(meta)
+  })
+})
+```
+### `getMetaInformation()`
+> Get the meta information of the youtube video
+
+Returns: `Object`, that represent all the meta information.
+
+```javascript
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
+
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getMetaInformation()
+  .then(meta => {
+    console.log(meta)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
+```
+### `getAuthorInfo()`
+> Get information about the author of the video
+
+Returns: `Object`, with the keys `name` and `channelId`
+
+```javascript
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
+
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getAuthorInfo()
+  .then(author=> {
+    console.log(author)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
+```
+### `getDescriptionExtras()`
+> Gets extra information
+
+Returns: `Object`
+
+```javascript
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
+
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getDescriptionExtras()
+  .then(result => {
+    console.log(result)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
+```
+### `getViewCount()`
+> Get the number of views.
+
+Returns: `Number` that represent number of view a video has
+
+```javascript
+import YoutubeVideoScraper from "@joegesualdo/youtube-video-scraper-node"
+
+let videoId = 'D_U6luQ6I90'
+new YoutubeVideoScraper(videoId)
+.then(scraper => {
+  scraper.getViewCount()
+  .then(meta => {
+    console.log(meta)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
+```
+## Test
+```
+$ npm test
 ```
 ## Build
 ```
