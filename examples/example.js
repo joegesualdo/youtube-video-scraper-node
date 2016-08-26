@@ -9,16 +9,16 @@ new YoutubeScraper('D_U6luQ6I90')
   .catch(err => {
     console.log(err)
   })
-  scraper.getAuthorInfo()
-  .then(meta => {
-    console.log(meta)
-  })
-  scraper.getDescriptionExtras()
-  .then(result => {
-    console.log(result)
-  })
-  scraper.getViewCount()
-  .then(meta => {
-    console.log(meta)
-  })
+  // scraper.getAuthorInfo()
+  // .then(meta => {
+  //   console.log(meta)
+  // })
+  // scraper.getDescriptionExtras()
+  // .then(result => {
+  //   console.log(result)
+  // })
+  // scraper.getViewCount()
+  // .then(meta => {
+  //   console.log(meta)
+  // })
 })

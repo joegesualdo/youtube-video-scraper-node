@@ -57,11 +57,13 @@ module.exports =
 
 	var _xRay2 = _interopRequireDefault(_xRay);
 
+	var _getMetaInformationFromHtml = __webpack_require__(2);
+
+	var _getMetaInformationFromHtml2 = _interopRequireDefault(_getMetaInformationFromHtml);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var parse5 = __webpack_require__(2);
 
 	var xray = (0, _xRay2.default)();
 
@@ -73,6 +75,7 @@ module.exports =
 
 	    return new Promise(function (resolve, reject) {
 	      var url = 'https://www.youtube.com/watch?v=' + videoId;
+
 	      xray(url, 'html@html')(function (err, html) {
 	        if (err) {
 	          reject(err);
@@ -90,10 +93,27 @@ module.exports =
 	      var _this2 = this;
 
 	      return new Promise(function (resolve, reject) {
-	        getMetaInformationFromHTML(_this2.html).then(function (result) {
-	          resolve(result);
-	        }).catch(function (err) {
-	          reject(err);
+	        xray(_this2.html, 'head@html')(function (e, headHtml) {
+	          if (e) {
+	            reject(e);
+	          } else {
+	            xray(_this2.html, '.watch-main-col@html')(function (err, mainColHtml) {
+	              if (err) {
+	                reject(e);
+	              } else {
+	                (0, _getMetaInformationFromHtml2.default)(headHtml).then(function (headMetas) {
+	                  (0, _getMetaInformationFromHtml2.default)(mainColHtml).then(function (mainColMetas) {
+	                    var metas = headMetas.concat(mainColMetas);
+	                    resolve(metas);
+	                  }).catch(function (pErr) {
+	                    reject(pErr);
+	                  });
+	                }).catch(function (pErr) {
+	                  reject(pErr);
+	                });
+	              }
+	            });
+	          }
 	        });
 	      });
 	    }
@@ -153,7 +173,8 @@ module.exports =
 	          if (err) {
 	            reject(err);
 	          } else {
-	            var result = data.split(" ")[0].replace(/,/g, '');
+	            var result = Number(data.split(' ')[0].replace(/,/g, ''));
+
 	            resolve(result);
 	          }
 	        });
@@ -163,32 +184,6 @@ module.exports =
 
 	  return YoutubeScraper;
 	}();
-
-	// Helper
-
-
-	function getMetaInformationFromHTML(html) {
-	  return new Promise(function (resolve, reject) {
-	    var metas = [];
-	    var fragment = parse5.parseFragment(html);
-	    fragment.childNodes.forEach(function (child) {
-	      if (child.nodeName === 'meta') {
-	        var a = {};
-	        var name = '';
-	        child.attrs.forEach(function (attr) {
-	          if (attr.name !== 'content') {
-	            a.typeKey = attr.name;
-	            a.typeValue = attr.value;
-	          } else {
-	            a.value = attr.value;
-	          }
-	        });
-	        metas.push(a);
-	      }
-	    });
-	    resolve(metas);
-	  });
-	}
 
 	exports.default = YoutubeScraper;
 
@@ -200,6 +195,112 @@ module.exports =
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports =
+	/******/ (function(modules) { // webpackBootstrap
+	/******/ 	// The module cache
+	/******/ 	var installedModules = {};
+
+	/******/ 	// The require function
+	/******/ 	function __webpack_require__(moduleId) {
+
+	/******/ 		// Check if module is in cache
+	/******/ 		if(installedModules[moduleId])
+	/******/ 			return installedModules[moduleId].exports;
+
+	/******/ 		// Create a new module (and put it into the cache)
+	/******/ 		var module = installedModules[moduleId] = {
+	/******/ 			exports: {},
+	/******/ 			id: moduleId,
+	/******/ 			loaded: false
+	/******/ 		};
+
+	/******/ 		// Execute the module function
+	/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+	/******/ 		// Flag the module as loaded
+	/******/ 		module.loaded = true;
+
+	/******/ 		// Return the exports of the module
+	/******/ 		return module.exports;
+	/******/ 	}
+
+
+	/******/ 	// expose the modules object (__webpack_modules__)
+	/******/ 	__webpack_require__.m = modules;
+
+	/******/ 	// expose the module cache
+	/******/ 	__webpack_require__.c = installedModules;
+
+	/******/ 	// __webpack_public_path__
+	/******/ 	__webpack_require__.p = "";
+
+	/******/ 	// Load entry module and return exports
+	/******/ 	return __webpack_require__(0);
+	/******/ })
+	/************************************************************************/
+	/******/ ([
+	/* 0 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = getMetaInformationFromHTML;
+
+		var _parse = __webpack_require__(1);
+
+		var _parse2 = _interopRequireDefault(_parse);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		function getMetaInformationFromHTML(html) {
+		  return new Promise(function (resolve) {
+		    var metas = [];
+		    var htmlFragment = _parse2.default.parseFragment(html);
+		    var nodes = void 0;
+		    if (htmlFragment.childNodes.length === 1 && htmlFragment.childNodes[0].nodeName !== 'meta') {
+		      nodes = htmlFragment.childNodes[0].childNodes;
+		    } else {
+		      nodes = htmlFragment.childNodes;
+		    }
+		    nodes.forEach(function (child) {
+		      if (child.nodeName === 'meta') {
+		        (function () {
+		          var obj = {};
+
+		          child.attrs.forEach(function (attr) {
+		            if (attr.name !== 'content') {
+		              obj.typeKey = attr.name;
+		              obj.typeValue = attr.value;
+		            } else {
+		              obj.value = attr.value;
+		            }
+		          });
+
+		          metas.push(obj);
+		        })();
+		      }
+		    });
+
+		    resolve(metas);
+		  });
+		}
+
+	/***/ },
+	/* 1 */
+	/***/ function(module, exports) {
+
+		module.exports = __webpack_require__(3);
+
+	/***/ }
+	/******/ ]);
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = require("parse5");

@@ -1,5 +1,5 @@
-import parse5 from 'parse5';
 import XRay from 'x-ray';
+import getMetaInformationFromHTML from '@joegesualdo/get-meta-information-from-html';
 
 const xray = XRay();
 
@@ -21,12 +21,31 @@ class YoutubeScraper {
 
   getMetaInformation() {
     return new Promise((resolve, reject) => {
-      getMetaInformationFromHTML(this.html)
-      .then(result => {
-        resolve(result);
-      })
-      .catch(err => {
-        reject(err);
+      xray(this.html, 'head@html')((e, headHtml) => {
+        if (e) {
+          reject(e);
+        } else {
+          xray(this.html, '.watch-main-col@html')((err, mainColHtml) => {
+            if (err) {
+              reject(e);
+            } else {
+              getMetaInformationFromHTML(headHtml)
+              .then(headMetas => {
+                getMetaInformationFromHTML(mainColHtml)
+                .then(mainColMetas => {
+                  const metas = headMetas.concat(mainColMetas);
+                  resolve(metas);
+                })
+                .catch(pErr => {
+                  reject(pErr);
+                });
+              })
+              .catch(pErr => {
+                reject(pErr);
+              });
+            }
+          });
+        }
       });
     });
   }
@@ -84,32 +103,6 @@ class YoutubeScraper {
       });
     });
   }
-}
-
-// Helper
-function getMetaInformationFromHTML(html) {
-  return new Promise((resolve) => {
-    const metas = [];
-    const htmlFragment = parse5.parseFragment(html);
-    htmlFragment.childNodes.forEach(child => {
-      if (child.nodeName === 'meta') {
-        const obj = {};
-
-        child.attrs.forEach(attr => {
-          if (attr.name !== 'content') {
-            obj.typeKey = attr.name;
-            obj.typeValue = attr.value;
-          } else {
-            obj.value = attr.value;
-          }
-        });
-
-        metas.push(obj);
-      }
-    });
-
-    resolve(metas);
-  });
 }
 
 export default YoutubeScraper;

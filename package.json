@@ -1,6 +1,6 @@
 {
   "name": "@joegesualdo/youtube-video-scraper-node",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Get information from the html of a youtube video page.",
   "repository": "joegesualdo/youtube-video-scraper-node",
   "main": "./dist/index.js",
@@ -24,7 +24,7 @@
     "distify-cli": "0.0.13"
   },
   "dependencies": {
-    "parse5": "^2.2.0",
+    "@joegesualdo/get-meta-information-from-html": "0.0.1",
     "x-ray": "^2.3.0"
   }
 }
