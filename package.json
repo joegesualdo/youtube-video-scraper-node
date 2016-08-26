@@ -6,7 +6,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "prepublish": "npm run build",
-    "build": "./node_modules/distify-cli/cli.js --input-file=./index.js --output-dir=./dist --is-node"
+    "build": "./node_modules/distify-cli/cli.js --input-file=./index.js --output-dir=./dist --is-node",
+    "test": "./node_modules/ava/cli.js test.js"
   },
   "keywords": [
     "youtube",
